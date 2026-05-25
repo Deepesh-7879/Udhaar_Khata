@@ -1,0 +1,9 @@
+services:
+  - type: static
+    name: udhaar-khata-frontend
+    env: static
+    routes:
+      # Rewrite all deep paths to index.html for React Router SPA
+      - source: /*
+        destination: /index.html
+        type: rewrite
