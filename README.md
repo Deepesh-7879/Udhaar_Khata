@@ -1,4 +1,4 @@
-# 📊 Digital Udhaar Khata (डिजिटल उधार खाता)
+# Digital Udhaar Khata 
 
 **Digital Udhaar Khata** is a premium, production-ready, full-stack SaaS web application designed for local Kirana stores, grocery merchants, and small retail businesses to digitize their traditional paper-based customer credit notebooks (*Udhaar Khata*). 
 
@@ -6,31 +6,31 @@ With multi-shop data isolation, shopkeeper-employee role management, atomic tran
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🏢 Multi-Shop SaaS Architecture
+###  Multi-Shop SaaS Architecture
 *   **Total Data Isolation**: Complete data separation using shop-specific scoping (`shopId`) across all collections.
 *   **Multi-Role Authorization**: Shop Owners can manage employees and delete records, while Employees can manage customers and log transactions under the owner's shop, but are restricted from deleting critical accounts (403 Forbidden).
 
-### 💳 Transaction Ledger & Atomic Calculations
+### Transaction Ledger & Atomic Calculations
 *   **Real-time Arithmetic**: Instant balance tracking. Credits add to dues, debits (payments) reduce them.
 *   **Self-Healing Session Fallback**: Backend automatically detects MongoDB standalone local instances vs. Atlas Replica Sets to execute queries safely with atomic guarantees where possible, bypassing session limits transparently on local environments.
 
-### 📈 Visual Analytics Dashboard
+###  Visual Analytics Dashboard
 *   **Interactive Charts**: Beautiful financial charts detailing daily transaction volumes (Credit vs. Debit) over the past 7 days using **Recharts**.
 *   **Metric Cards**: High-impact cards representing total pending dues, total customer base, monthly collections, and credit extensions.
 
-### 📱 Dynamic Payments & Reminders
+###  Dynamic Payments & Reminders
 *   **Instant UPI QR Code Generator**: Renders standard merchant UPI QR payment codes instantly inside the customer drawer using the store's configured UPI ID.
 *   **Twilio Reminder Integrations**: Dispatches SMS/WhatsApp payment links and ledger statements directly to customers. Standard console logging simulation kicks in when Twilio credentials are omitted in development mode.
 
-### 📄 Professional Export Capabilities
+###  Professional Export Capabilities
 *   **Ledger PDFs**: Premium downloadable customer transaction statements generated client-side via **jsPDF** and **jsPDF-AutoTable**.
 *   **Ledger CSVs**: Fast download of detailed report matrices for bookkeeping or accountants.
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 | Layer | Technologies |
 | :--- | :--- |
@@ -41,7 +41,7 @@ With multi-shop data isolation, shopkeeper-employee role management, atomic tran
 
 ---
 
-## 📂 Codebase Directory Structure
+##  Codebase Directory Structure
 
 ```
 Udhaar_Khata/
@@ -71,15 +71,15 @@ Udhaar_Khata/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
-### 📋 Prerequisites
+### Prerequisites
 *   [Node.js](https://nodejs.org/) (v18 or higher recommended; natively tested on Node.js v24)
 *   [MongoDB](https://www.mongodb.com/) running locally on `mongodb://127.0.0.1:27017` or a MongoDB Atlas connection string.
 
 ---
 
-### 💻 Local Setup & Execution
+###  Local Setup & Execution
 
 #### 1. Database & Backend Configuration
 1.  Navigate into the `Backend` directory:
@@ -133,7 +133,7 @@ Udhaar_Khata/
 
 ---
 
-## 🧪 Running Automated E2E API Tests
+##  Running Automated E2E API Tests
 
 A dedicated, comprehensive 10-Point Integration Test script has been created to instantly verify the robustness, mathematical calculations, security scoping, and user role mechanics of the system.
 
@@ -159,7 +159,7 @@ The test script automatically:
 
 ---
 
-## 🛡️ Production Deployment Checklist
+##  Production Deployment Checklist
 
 ### Backend Deployment (Render / Heroku)
 1.  Mount your repository on **Render** as a Web Service.
