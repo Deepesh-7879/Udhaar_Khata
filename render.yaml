@@ -6,4 +6,4 @@ services:
       # Rewrite all deep paths to index.html for React Router SPA
       - source: /*
         destination: /index.html
-        type: rewrite
+        Action: rewrite
