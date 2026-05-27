@@ -9,6 +9,88 @@ export const sendEmailNotification = async ({ email, name, amount, shopName, fro
   const storeName = shopName || 'our store';
   const messageBody = `Hello ${name}, your pending udhaar amount at ${storeName} is ₹${amount}. Kindly pay at your convenience.`;
 
+  // If Brevo API Key is configured in the environment, send via Brevo HTTP API (Avoids SMTP ports blocked by Render)
+  if (process.env.BREVO_API_KEY) {
+    const brevoApiKey = process.env.BREVO_API_KEY.trim();
+    const smtpFrom = process.env.SMTP_FROM ? process.env.SMTP_FROM.trim() : (process.env.SMTP_USER ? process.env.SMTP_USER.trim() : '');
+    
+    if (!smtpFrom) {
+      throw new Error('Failed to send email via Brevo: SMTP_FROM or SMTP_USER must be configured as the sender email address.');
+    }
+
+    const senderEmail = smtpFrom;
+    const senderDisplayName = storeName;
+
+    const htmlContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f1f5f9; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+          <div style="border-bottom: 2px solid #3b82f6; padding-bottom: 10px; margin-bottom: 20px;">
+            <h2 style="color: #1e3a8a; margin: 0; font-size: 22px; text-transform: uppercase;">${storeName}</h2>
+            <span style="font-size: 12px; color: #6b7280; font-weight: bold;">DIGITAL UDHAAR LEDGER</span>
+          </div>
+          <p style="font-size: 16px; color: #374151; line-height: 1.6; margin-top: 0;">Hello <strong>${name}</strong>,</p>
+          <p style="font-size: 16px; color: #374151; line-height: 1.6;">
+            This is a friendly reminder regarding your outstanding balance with our store.
+          </p>
+          <div style="background-color: #fef2f2; border: 1px dashed #fca5a5; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+            <span style="font-size: 12px; color: #ef4444; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 4px;">Pending Amount Due</span>
+            <span style="font-size: 28px; color: #b91c1c; font-weight: 900;">₹${amount.toLocaleString('en-IN')}</span>
+          </div>
+          <p style="font-size: 16px; color: #374151; line-height: 1.6;">
+            We kindly request you to clear this outstanding amount at your convenience. If you have already made the payment, please ignore this email.
+          </p>
+          <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+          <p style="font-size: 11px; color: #9ca3af; text-align: center; margin-bottom: 0;">
+            This is an automated payment alert sent by ${storeName} using Udhaar Khata ledger application.
+          </p>
+        </div>
+      `;
+
+    try {
+      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'api-key': brevoApiKey,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: {
+            name: senderDisplayName,
+            email: senderEmail,
+          },
+          to: [
+            {
+              email: cleanEmail,
+              name: name,
+            },
+          ],
+          replyTo: {
+            email: fromEmail || senderEmail,
+          },
+          subject: `Payment Reminder - ${storeName}`,
+          htmlContent: htmlContent,
+          textContent: messageBody,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      }
+
+      const resJson = await response.json();
+      return {
+        success: true,
+        simulated: false,
+        sid: resJson.messageId,
+        message: messageBody,
+      };
+    } catch (error) {
+      console.error(`Brevo API Error dispatching Email reminder: ${error.message}`);
+      throw new Error(`Failed to send email reminder via Brevo: ${error.message}`);
+    }
+  }
+
   const hasCustomSmtp = smtpSettings && smtpSettings.host && smtpSettings.user && smtpSettings.pass;
 
   const smtpHost = hasCustomSmtp 
