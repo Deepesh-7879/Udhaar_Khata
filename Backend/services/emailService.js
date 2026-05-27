@@ -11,11 +11,21 @@ export const sendEmailNotification = async ({ email, name, amount, shopName, fro
 
   const hasCustomSmtp = smtpSettings && smtpSettings.host && smtpSettings.user && smtpSettings.pass;
 
-  const smtpHost = hasCustomSmtp ? smtpSettings.host : process.env.SMTP_HOST;
-  const smtpPort = hasCustomSmtp ? smtpSettings.port : (process.env.SMTP_PORT || 587);
-  const smtpUser = hasCustomSmtp ? smtpSettings.user : process.env.SMTP_USER;
-  const smtpPass = hasCustomSmtp ? smtpSettings.pass : process.env.SMTP_PASS;
-  const smtpFrom = hasCustomSmtp ? smtpSettings.user : (fromEmail || process.env.SMTP_FROM || smtpUser);
+  const smtpHost = hasCustomSmtp 
+    ? (smtpSettings.host ? smtpSettings.host.trim() : '') 
+    : (process.env.SMTP_HOST ? process.env.SMTP_HOST.trim() : '');
+  const smtpPort = hasCustomSmtp 
+    ? smtpSettings.port 
+    : (process.env.SMTP_PORT ? process.env.SMTP_PORT.toString().trim() : 587);
+  const smtpUser = hasCustomSmtp 
+    ? (smtpSettings.user ? smtpSettings.user.trim() : '') 
+    : (process.env.SMTP_USER ? process.env.SMTP_USER.trim() : '');
+  const smtpPass = hasCustomSmtp 
+    ? smtpSettings.pass 
+    : (process.env.SMTP_PASS ? process.env.SMTP_PASS : '');
+  const smtpFrom = hasCustomSmtp 
+    ? (smtpSettings.user ? smtpSettings.user.trim() : '') 
+    : (fromEmail ? fromEmail.trim() : (process.env.SMTP_FROM ? process.env.SMTP_FROM.trim() : smtpUser));
 
   // Check if SMTP is configured
   if (!smtpUser || !smtpPass) {
