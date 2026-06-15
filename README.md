@@ -96,10 +96,10 @@ Udhaar_Khata/
     ```
     Configure the following values inside `.env`:
     ```env
-    PORT=5000
-    MONGO_URI=mongodb://127.0.0.1:27017/udhaar_khata
-    JWT_SECRET=supersecret_jwt_sign_key_change_in_prod
-    JWT_EXPIRE=30d
+    PORT=
+    MONGO_URI=
+    JWT_SECRET=
+    JWT_EXPIRE=
     
     # Twilio Configuration (Optional - Simulator active when empty)
     TWILIO_ACCOUNT_SID=

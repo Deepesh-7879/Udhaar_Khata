@@ -161,7 +161,7 @@ const Settings = () => {
 
           <form onSubmit={handleProfileSubmit} className="space-y-4">
             {isEmployee && (
-              <div className="p-4 bg-primary-50 text-primary-855 text-xs rounded-xl flex items-center gap-2.5 border border-primary-100/60 animate-fade-in font-medium">
+              <div className="p-4 bg-primary-50 text-primary-800 text-xs rounded-xl flex items-center gap-2.5 border border-primary-100/60 animate-fade-in font-medium">
                 <AlertCircle className="w-4 h-4 text-primary-600 flex-shrink-0" />
                 <span>You are logged in as a <strong>Staff Employee</strong>. Shop configurations are managed by the merchant owner and are read-only here.</span>
               </div>
